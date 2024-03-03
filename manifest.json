@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "sTels logistic technology",
+    "description": "This app will help you parse data and create string",
+    "version": "0.5",
+    "background": {
+        "scripts": ["event.js"],
+        "persistent": false
+    },
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "tabs",
+        "file:///*",
+        "http://*/*",
+        "https://*/*"
+    ]
+}

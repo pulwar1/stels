@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="css/popup.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/select2.min.css" />
+    <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet" href="css/select2-bootstrap-5-theme.rtl.min.css" />
+    <script src="js/jquery.slim.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/select2.min.js"></script>
+    <script src="js/popup.js"></script>
+</head>
+<body>
+<form id="addbookmark">
+<div class="container-sm mt-8" style="min-width: 450px;">
+    <h2 class="text-center mb-4">Spot card</h2>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th scope="row">from</th>
+            <td>
+                <input type="text" class="form-control" id="from" aria-describedby="emailHelp">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">to</th>
+            <td>
+                <textarea type="text" class="form-control" id="to" rows="3"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">ID</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="id">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">company</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="company">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">start</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="start">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">end</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="end">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">type</th>
+            <td colspan="2">
+                <select class="form-select select-field" id="type" data-placeholder="Select from list">
+                    <option></option>
+                    <option value="FTL">FTL</option>
+                    <option value="LTL">LTL</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">req</th>
+            <td colspan="2">
+                <select class="form-select select-field" id="req" data-placeholder="Select from list">
+                    <option></option>
+                    <option value="REF">REF</option>
+                    <option value="TILT">TILT</option>
+                    <option value="120m3">120m3</option>
+                    <option value="MEGA">MEGA</option>
+                    <option value="box trailer">box trailer</option>
+                    <option value="small">small</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">special</th>
+            <td colspan="2">
+                <select class="form-select select-field" id="special" data-placeholder="Select from list">
+                    <option value="0">Not selected</option>
+                    <option value="ADR">ADR</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">weight</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="weight">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">for LTL only</th>
+            <td colspan="2">
+                <input type="text" class="form-control" id="ltl" required>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">comments</th>
+            <td colspan="2">
+                <textarea type="text" class="form-control" id="comment"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">result</th>
+            <td colspan="2">
+                <textarea type="text" class="form-control" id="result" rows="6"></textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary ">Create card</button>
+        </div>
+
+</div>
+</form>
+</body>
+</html>
