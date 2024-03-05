@@ -65,7 +65,16 @@ window.addEventListener('load', function(evt) {
         openOnEnter: false
     } );
     document.getElementById('addbookmark').addEventListener('submit', addBookmark);
+
+    document.getElementById('sendToTrello').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        var inputValue = document.getElementById('result').value
+        console.log(inputValue);
+        navigator.serviceWorker.controller.postMessage({ type: 'myFunction', input: inputValue});
+    });
 });
+
+
 
 $(document).ready(function() {
     $(document).on('change', '#type', function() {
