@@ -61,16 +61,6 @@ function extractWholeNumber(weightString) {
     return parseInt(parts[0]) + ' ' + parts[1];
 }
 
-// chrome.runtime.sendMessage({
-//     'id': document.querySelector('table.common-grid-table').querySelector('tr').querySelectorAll('td')[1].innerText,
-//     'from': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Country")].querySelector('div').innerText.split('\n')[0],
-//     'to': addRecipients(),
-//     'name': document.querySelector('table.common-grid-table').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText,
-//     'weight': extractWholeNumber(extractWeight(document.querySelector('table.common-grid-table').querySelectorAll('tr')[2].querySelectorAll('td')[4].innerText)),
-//     'start': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Pickup")].querySelector('div').innerText.split('\n')[0],
-//     'end': returnEnd(),
-// });
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("Recv. Send response = " + document.title);
     var data = {
@@ -83,7 +73,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         'end': returnEnd(),
     }
     sendResponse(data);
-    //sendResponse({ title: document.title});
-
     return true;
 });

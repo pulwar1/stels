@@ -11,7 +11,7 @@
         }
     ],
     "background": {
-        "service_worker": "event.js"
+        "service_worker": "background.js"
     },
     "host_permissions": [
         "<all_urls>"
