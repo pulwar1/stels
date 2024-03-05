@@ -1,20 +1,23 @@
 {
-    "manifest_version": 2,
     "name": "sTels logistic technology",
+    "version": "0.2",
+    "manifest_version": 3,
     "description": "This app will help you parse data and create string",
-    "version": "0.5",
+    "permissions": ["storage", "tabs", "activeTab"],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
     "background": {
-        "scripts": ["event.js"],
-        "persistent": false
+        "service_worker": "event.js"
     },
-    "browser_action": {
-        "default_icon": "icon.png",
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action": {
+        "default_title": "Title",
         "default_popup": "popup.html"
-    },
-    "permissions": [
-        "tabs",
-        "file:///*",
-        "http://*/*",
-        "https://*/*"
-    ]
+    }
 }

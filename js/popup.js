@@ -63,6 +63,19 @@ function addBookmark() {
         });
 }
 
+
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    console.log("Send");
+    chrome.tabs.sendMessage(tabs[0].id, "message", (pageDetails) => {
+        console.log(pageDetails)
+        document.getElementById('from').value = pageDetails.from;
+        document.getElementById('to').value = pageDetails.to;
+        document.getElementById('id').value = pageDetails.id;
+        document.getElementById('weight').value = pageDetails.weight;
+        document.getElementById('start').value = pageDetails.start;
+        document.getElementById('end').value = pageDetails.end;
+    });
+});
 // When the popup HTML has loaded
 window.addEventListener('load', function(evt) {
 
@@ -76,10 +89,10 @@ window.addEventListener('load', function(evt) {
 
     document.getElementById('addbookmark').addEventListener('submit', addBookmark);
 
-    // Get the event page
-    chrome.runtime.getBackgroundPage(function(eventPage) {
-        eventPage.getPageDetails(onPageDetailsReceived);
-    });
+    // // Get the event page
+    // chrome.runtime.getBackgroundPage(function(eventPage) {
+    //     eventPage.getPageDetails(onPageDetailsReceived);
+    // });
 
 
 });
