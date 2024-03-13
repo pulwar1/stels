@@ -2,7 +2,7 @@
     "name": "sTels logistic technology",
     "version": "0.2",
     "manifest_version": 3,
-    "description": "This app will help you parse data and create string",
+    "description": "This app will help you parse data and create card in trello",
     "permissions": [
         "tabs",
         "notifications",
@@ -27,6 +27,14 @@
     "host_permissions": [
         "<all_urls>"
     ],
+    "icons": {
+        "16": "icon.png",
+        "32": "icon.png",
+        "48": "icon.png",
+        "64": "icon.png",
+        "128": "icon.png",
+        "256": "icon.png"
+    },
     "action": {
         "default_title": "Title",
         "default_popup": "popup.html"

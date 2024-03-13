@@ -24,32 +24,6 @@ self.addEventListener('install', function(event) {
     // currently unused
 });
 
-
-// add context menu item
-chrome.runtime.onInstalled.addListener(function() {
-    // chrome.contextMenus.create({
-    //     id: contextMenuId,
-    //     title: "Send page to Trello",
-    //     contexts: ["page", "frame", "link", "editable", "video", "audio", "browser_action", "page_action"]}
-    // );
-    // chrome.contextMenus.create({
-    //     id: contextMenuId + "Selection",
-    //     title: "Send selection+page to Trello",
-    //     contexts: ["selection"]}
-    // );
-    // chrome.contextMenus.create({
-    //     id: contextMenuId + "OnlySelection",
-    //     title: "Send selection to Trello",
-    //     contexts: ["selection"]}
-    // );
-    // chrome.contextMenus.create({
-    //     id: contextMenuId + "Image",
-    //     title: "Send image to Trello",
-    //     contexts: ["image"]}
-    // );
-});
-
-
 // handle extension button click
 chrome.action.onClicked.addListener(function(tab) {
     oneClickSendToTrello(tab);

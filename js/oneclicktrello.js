@@ -28,6 +28,25 @@ export async function myOwnCard(text)
     };
 
     trelloApi.rest('POST', 'cards', newCard);
+
+
+    if (options.showNotification) {
+        console.log('showNotification')
+        var newNotification = {
+            title: "Trello card created!",
+            message: 'Created card "' + newCard.name + '".',
+            iconUrl: "icon.png",
+            type: "basic",
+            buttons: [
+                {title: 'Show card...'},
+                {title: 'Delete card'}
+            ]
+        };
+
+        createNotification(null, newNotification, newCard)
+
+    }
+
 }
 
 export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
@@ -73,7 +92,7 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
         var newNotification = {
             title: "Trello card created!",
             message: 'Created card "' + newCard.name + '".',
-            iconUrl: "icons/icon256.png",
+            iconUrl: "icon.png",
             type: "basic",
             buttons: [
                 {title: 'Show card...'},

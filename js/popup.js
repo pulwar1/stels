@@ -58,12 +58,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 });
 // When the popup HTML has loaded
 window.addEventListener('load', function(evt) {
-    console.log('page loaded');
-    $( '.select-field' ).select2( {
-        theme: 'bootstrap-5',
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        openOnEnter: false
-    } );
+    // console.log('page loaded');
+    // $( '.select-field' ).select2( {
+    //     theme: 'bootstrap-5',
+    //     width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    //     openOnEnter: false
+    // } );
     document.getElementById('addbookmark').addEventListener('submit', addBookmark);
 
     document.getElementById('sendToTrello').addEventListener('click', function(event) {
