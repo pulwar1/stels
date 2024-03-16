@@ -4,8 +4,6 @@ import {storage} from '/js/store.js';
 
 export async function myOwnCard(text)
 {
-    console.log(text)
-
     //return false;
     // try to login, if not possible: open options page to login
     if (!trelloApi.authorized()) {
@@ -31,7 +29,6 @@ export async function myOwnCard(text)
 
 
     if (options.showNotification) {
-        console.log('showNotification')
         var newNotification = {
             title: "Trello card created!",
             message: 'Created card "' + newCard.name + '".',
@@ -50,7 +47,6 @@ export async function myOwnCard(text)
 }
 
 export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
-    console.log(tab, contextInfo, withLink)
     // try to login, if not possible: open options page to login
     if (!trelloApi.authorized()) {
         chrome.runtime.openOptionsPage();
@@ -119,8 +115,6 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
             trelloApi.rest('DELETE', 'cards/' + card.id + '/attachments/' + card.idAttachmentCover)
         }
     }).catch(function(error) {
-        console.log(error);
-
         let updatedContent = {
             title: "Failed to create card!",
             message: error.message,

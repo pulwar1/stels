@@ -71,6 +71,7 @@ window.addEventListener('load', function(evt) {
         var inputValue = document.getElementById('result').value
         console.log(inputValue);
         navigator.serviceWorker.controller.postMessage({ type: 'myFunction', input: inputValue});
+        document.getElementById('sendToTrello').disabled = true;
     });
 });
 

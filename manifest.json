@@ -1,6 +1,6 @@
 {
     "name": "sTels logistic technology",
-    "version": "0.2",
+    "version": "1.0.0",
     "manifest_version": 3,
     "description": "This app will help you parse data and create card in trello",
     "permissions": [
