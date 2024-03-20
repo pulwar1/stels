@@ -37,6 +37,6 @@
     },
     "action": {
         "default_title": "Title",
-        "default_popup": "popup.html"
+        "default_popup": "infex.html"
     }
 }
