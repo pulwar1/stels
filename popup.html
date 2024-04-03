@@ -60,11 +60,14 @@
         <tr>
             <th scope="row">type</th>
             <td colspan="2">
-                <select class="form-select select-field" id="type" data-placeholder="Select from list">
-                    <option></option>
-                    <option value="FTL">FTL</option>
-                    <option value="LTL">LTL</option>
-                </select>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="FTL">
+                    <label class="form-check-label" for="inlineRadio1">FTL</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="LTL">
+                    <label class="form-check-label" for="inlineRadio2">LTL</label>
+                </div>
             </td>
         </tr>
         <tr>
@@ -84,10 +87,14 @@
         <tr>
             <th scope="row">special</th>
             <td colspan="2">
-                <select class="form-select select-field" id="special" data-placeholder="Select from list">
-                    <option value="0">Not selected</option>
-                    <option value="ADR">ADR</option>
-                </select>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="special" id="inlineRadio3" value="0">
+                    <label class="form-check-label" for="inlineRadio3">Not selected</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="special" id="inlineRadio4" value="ADR">
+                    <label class="form-check-label" for="inlineRadio4">ADR</label>
+                </div>
             </td>
         </tr>
         <tr>
