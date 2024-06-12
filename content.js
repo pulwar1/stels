@@ -63,14 +63,27 @@ function extractWholeNumber(weightString) {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("Recv. Send response = " + document.title);
-    var data = {
-        'id': document.querySelector('table.common-grid-table').querySelector('tr').querySelectorAll('td')[1].innerText,
-        'from': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Country")].querySelector('div').innerText.split('\n')[0],
-        'to': addRecipients(),
-        'name': document.querySelector('table.common-grid-table').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText,
-        'weight': extractWholeNumber(extractWeight(document.querySelector('table.common-grid-table').querySelectorAll('tr')[2].querySelectorAll('td')[4].innerText)),
-        'start': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Pickup")].querySelector('div').innerText.split('\n')[0],
-        'end': returnEnd(),
+    if (document.querySelector('#transportSummary')) {
+        var data = {
+            'id': document.querySelector('#transportSummary').querySelector('tr').querySelectorAll('td')[1].innerText,
+            'from': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[2].innerText,
+            'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
+            'weight': convertWeightString(document.querySelector('#transportSummary').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText),
+            'start': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[3].innerText,
+            'end': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[3].innerText,
+
+        }
+        console.log('data', data)
+    } else {
+        var data = {
+            'id': document.querySelector('table.common-grid-table').querySelector('tr').querySelectorAll('td')[1].innerText,
+            'from': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Country")].querySelector('div').innerText.split('\n')[0],
+            'to': addRecipients(),
+            'name': document.querySelector('table.common-grid-table').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText,
+            'weight': extractWholeNumber(extractWeight(document.querySelector('table.common-grid-table').querySelectorAll('tr')[2].querySelectorAll('td')[4].innerText)),
+            'start': document.querySelector('table.content-padding.table-list').querySelectorAll('tr')[1].querySelectorAll('td')[findCountryCellIndex("Pickup")].querySelector('div').innerText.split('\n')[0],
+            'end': returnEnd(),
+        }
     }
     sendResponse(data);
     return true;
