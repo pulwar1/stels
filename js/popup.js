@@ -11,8 +11,9 @@ function addBookmark() {
     var weight = document.getElementById('weight').value;
     var start = document.getElementById('start').value;
     var end = document.getElementById('end').value;
-    var type = document.getElementById('type').value;
-    var special = document.getElementById('special').value;
+    var type = document.querySelector('input[name="type"]:checked').value;
+    var specialElement = document.querySelector('input[name="special"]:checked');
+    var special = specialElement ? specialElement.value : '';
     var ltl = document.getElementById('ltl').value;
     var req = document.getElementById('req').value;
     var comment = document.getElementById('comment').value;
@@ -25,7 +26,7 @@ function addBookmark() {
         special = '';
     }
 
-    var params = fromCode + '-' + toCode + '/ID ' + id + ' ' + company + '/' + from + '/' + to + '/' + start + ' --> ' + end + '/' + type + '/' + req + '/' + special + '/' + weight + '/' + ltl;
+    var params = fromCode + '-' + toCode + '/ID ' + id + ' ' + company + '/' + from + ' --> ' + to + '/' + start + ' --> ' + end + '/' + type + '/' + req + '/' + special + '/' + weight + '/' + ltl;
 
     if (ltl) {
         params += ' ldm'
@@ -50,6 +51,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         console.log(pageDetails)
         document.getElementById('from').value = pageDetails.from;
         document.getElementById('to').value = pageDetails.to;
+        document.getElementById('company').value = pageDetails.name;
         document.getElementById('id').value = pageDetails.id;
         document.getElementById('weight').value = pageDetails.weight;
         document.getElementById('start').value = pageDetails.start;
@@ -78,17 +80,17 @@ window.addEventListener('load', function(evt) {
 
 
 $(document).ready(function() {
-    $(document).on('change', '#type', function() {
+    $(document).on('change', 'input[name="type"]', function() {
         var selectedValue = $(this).val();
         var ltlInput = $('#ltl');
 
         if (selectedValue === 'FTL') {
-            ltlInput.prop('disabled', true);
-            ltlInput.prop('required', false);
-            ltlInput.val('')
-        } else {
-            ltlInput.prop('disabled', false);
-            ltlInput.prop('required', true);
+            ltlInput.prop('disabled', true)
+                .prop('required', false)
+                .val('');
+        } else if (selectedValue === 'LTL') {
+            ltlInput.prop('disabled', false)
+                .prop('required', true);
         }
     });
 

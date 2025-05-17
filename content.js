@@ -63,7 +63,7 @@ function extractWholeNumber(weightString) {
 
 function convertWeightString(weightString) {
     // Step 1: Remove the "kg" suffix and commas
-    let cleanedString = weightString.replace(/,/g, '').replace(' kg', '');
+    let cleanedString = weightString.replace(/[^\d,.]/g, '').replace(',', '.');
 
     // Step 2: Parse the number
     let number = parseFloat(cleanedString);
@@ -84,6 +84,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             'id': document.querySelector('#transportSummary').querySelector('tr').querySelectorAll('td')[1].innerText,
             'from': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[2].innerText,
             'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
+            'name': document.querySelector('#shipperTable td div span').textContent,
             'weight': convertWeightString(document.querySelector('#transportSummary').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText),
             'start': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[3].innerText,
             'end': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[3].innerText,
@@ -102,7 +103,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
     }
 
-
+    console.log('data', data)
     sendResponse(data);
     return true;
 });
