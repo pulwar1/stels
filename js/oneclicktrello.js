@@ -19,10 +19,12 @@ export async function myOwnCard(text)
         return;
     }
 
+    var idMember = (await storage.get('idMember')).idMember;
     var newCard = {
         name: text,
         idList: options.listId,
-        pos: options.listPosition
+        pos: options.listPosition,
+        idMembers:[idMember]
     };
 
     trelloApi.rest('POST', 'cards', newCard);

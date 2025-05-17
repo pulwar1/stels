@@ -55,7 +55,7 @@ export const trelloApi = {
         authURL.searchParams.append('callback_method', 'fragment'); 
         authURL.searchParams.append('scope', 'read,write'); 
         authURL.searchParams.append('expiration', 'never'); 
-        authURL.searchParams.append('name', 'One-Click Trello'); 
+        authURL.searchParams.append('name', 'Stels Trello');
         authURL.searchParams.append('key', 'a7af098472bfd1bf86dc307c418fc851');
         authURL.searchParams.append('response_type', 'token'); 
     
@@ -67,11 +67,26 @@ export const trelloApi = {
                     url: authURL.href,
                     interactive: true
                 },
-                function(data) {
+                async function(data) {
                     console.log(data);
                     var token = new URL(data).hash.substr(7);
                     console.log("token: " + token);
-                    storage.set({token: token}).then(resolve);
+
+                    // Получение idMember после авторизации
+                    try {
+                        const response = await fetch(`https://api.trello.com/1/members/me?key=${trelloApi.key}&token=${token}`);
+                        if (!response.ok) {
+                            throw new Error('Не удалось получить данные пользователя');
+                        }
+                        const userData = await response.json();
+                        const idMember = userData.id;
+
+                        await storage.set({ token: token, idMember: idMember });
+                        resolve();
+                    } catch (err) {
+                        console.error("Ошибка при получении idMember:", err);
+                        reject(err);
+                    }
                 }
             );
         });
