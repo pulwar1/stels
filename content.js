@@ -21,6 +21,23 @@ function findCountryCellIndex(str) {
     return countryCellIndex;
 }
 
+function findRowNumberByLabelsForWeight(labels) {
+    const rows = document.querySelectorAll('#transportSummary tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const labelCell = rows[i].querySelector('.label');
+        if (labelCell) {
+            const cellText = labelCell.textContent.trim();
+            // Проверяем, содержит ли текст ячейки любое из искомых значений
+            if (labels.some(label => cellText.includes(label))) {
+                return i;
+            }
+        }
+    }
+
+    return -1; // Если ни одно значение не найдено
+}
+
 function extractWeight(str) {
     // Find the index of the first slash (/)
     var firstSlashIndex = str.indexOf('/');
@@ -77,15 +94,49 @@ function convertWeightString(weightString) {
     return result;
 }
 
+function getTableValuesString(searchValues, targetColumn, tableSelector = '.uniqueStationsTable') {
+    const table = document.querySelector(tableSelector);
+    if (!table || !Array.isArray(searchValues) || searchValues.length === 0) return '';
+
+    const rows = table.querySelectorAll('tbody:last-child tr');
+    const results = [];
+
+    for (const row of rows) {
+        const firstCell = row.querySelector('td:first-child');
+        if (firstCell) {
+            const cellText = firstCell.textContent.trim();
+            if (searchValues.includes(cellText)) {
+                const targetCell = row.querySelectorAll('td')[targetColumn];
+                if (targetCell) {
+                    results.push(targetCell.textContent.trim());
+                }
+            }
+        }
+    }
+
+    return results.length === 0 ? '' : results.join('\n');
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("Recv. Send response = " + document.title);
     if (document.querySelector('#transportSummary')) {
         var data = {
             'id': document.querySelector('#transportSummary').querySelector('tr').querySelectorAll('td')[1].innerText,
-            'from': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[2].innerText,
-            'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
+            'from': getTableValuesString(['Место загрузки'], 2),
+            'to': getTableValuesString(['Место разгрузки'], 2),
+            //'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
             'name': document.querySelector('#shipperTable td div span').textContent,
-            'weight': convertWeightString(document.querySelector('#transportSummary').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText),
+            'weight': (function() {
+                const rowIndex = findRowNumberByLabelsForWeight(['Вес', 'Weight', 'Waga']);
+                return rowIndex === -1 ? '' : convertWeightString(
+                    document.querySelector('#transportSummary')
+                        .querySelectorAll('tr')[rowIndex]
+                        .querySelectorAll('td')[1]
+                        .innerText
+                );
+            })(),
+            //'weight': convertWeightString(document.querySelector('#transportSummary').querySelectorAll('tr')[findRowNumberByLabels(['Вес', 'Weight'])].querySelectorAll('td')[1].innerText),
+            //'weight': convertWeightString(document.querySelector('#transportSummary').querySelectorAll('tr')[1].querySelectorAll('td')[1].innerText),
             'start': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[1].querySelectorAll('td')[3].innerText,
             'end': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[3].innerText,
 
