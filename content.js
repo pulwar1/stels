@@ -122,8 +122,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (document.querySelector('#transportSummary')) {
         var data = {
             'id': document.querySelector('#transportSummary').querySelector('tr').querySelectorAll('td')[1].innerText,
-            'from': getTableValuesString(['Место загрузки'], 2),
-            'to': getTableValuesString(['Место разгрузки'], 2),
+            'from': getTableValuesString(['Место загрузки', 'Loading station', 'Miejsce załadunku'], 2),
+            'to': getTableValuesString(['Место разгрузки', 'Unloading station', 'Miejsce rozładunku'], 2),
             //'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
             'name': document.querySelector('#shipperTable td div span').textContent,
             'weight': (function() {
