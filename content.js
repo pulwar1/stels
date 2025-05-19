@@ -79,6 +79,7 @@ function extractWholeNumber(weightString) {
 }
 
 function convertWeightString(weightString) {
+    return weightString;
     // Step 1: Remove the "kg" suffix and commas
     let cleanedString = weightString.replace(/[^\d,.]/g, '').replace(',', '.');
 
@@ -122,12 +123,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (document.querySelector('#transportSummary')) {
         var data = {
             'id': document.querySelector('#transportSummary').querySelector('tr').querySelectorAll('td')[1].innerText,
-            'from': getTableValuesString(['Место загрузки', 'Loading station', 'Miejsce załadunku'], 2),
-            'to': getTableValuesString(['Место разгрузки', 'Unloading station', 'Miejsce rozładunku'], 2),
+            'from': getTableValuesString(['Место загрузки', 'Loading station', 'Miejsce załadunku', 'Místo nakládky', 'Origin'], 2),
+            'to': getTableValuesString(['Место разгрузки', 'Unloading station', 'Miejsce rozładunku', 'Místo vykládky', 'Destination'], 2),
             //'to': document.querySelector('table.uniqueStationsTable').querySelectorAll('tr')[2].querySelectorAll('td')[2].innerText,
             'name': document.querySelector('#shipperTable td div span').textContent,
             'weight': (function() {
-                const rowIndex = findRowNumberByLabelsForWeight(['Вес', 'Weight', 'Waga']);
+                const rowIndex = findRowNumberByLabelsForWeight(['Вес', 'Weight', 'Waga', 'Hmotnost']);
                 return rowIndex === -1 ? '' : convertWeightString(
                     document.querySelector('#transportSummary')
                         .querySelectorAll('tr')[rowIndex]

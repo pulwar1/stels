@@ -5,8 +5,8 @@ function addBookmark() {
     event.preventDefault();
 
 
-    var from = document.getElementById('from').value;
-    var to = document.getElementById('to').value;
+    var from = replaceOnlyNewlines(document.getElementById('from').value);
+    var to = replaceOnlyNewlines(document.getElementById('to').value);
     var id = document.getElementById('id').value;
     var weight = document.getElementById('weight').value;
     var start = document.getElementById('start').value;
@@ -44,6 +44,9 @@ function addBookmark() {
         });
 }
 
+function replaceOnlyNewlines(text) {
+    return text.replace(/\r?\n/g, ' + ');
+}
 
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     console.log("Send");
