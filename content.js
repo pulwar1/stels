@@ -22,7 +22,8 @@ function findCountryCellIndex(str) {
 }
 
 function findRowNumberByLabelsForWeight(labels) {
-    const rows = document.querySelectorAll('#transportSummary tr');
+    const transportSummary = document.querySelector('#transportSummary');
+    const rows = transportSummary.querySelectorAll('tr');
 
     for (let i = 0; i < rows.length; i++) {
         const labelCell = rows[i].querySelector('.label');
@@ -129,6 +130,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             'name': document.querySelector('#shipperTable td div span').textContent,
             'weight': (function() {
                 const rowIndex = findRowNumberByLabelsForWeight(['Вес', 'Weight', 'Waga', 'Hmotnost']);
+                console.log('rowIndex', rowIndex);
                 return rowIndex === -1 ? '' : convertWeightString(
                     document.querySelector('#transportSummary')
                         .querySelectorAll('tr')[rowIndex]
@@ -143,6 +145,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         }
         console.log('data', data)
+    } else if (document.querySelector('#transportListTable')) {
+        var data = {
+            'id': document.querySelector('table.common-grid-table').querySelector('tr').querySelectorAll('td')[1].innerText,
+            'from': document.querySelector('table#transportListTable').querySelectorAll('tr')[1].querySelectorAll('td')[6].querySelector('div').innerText.split('\n')[0],
+            'to': document.querySelector('table#transportListTable').querySelectorAll('tr')[1].querySelectorAll('td')[6].querySelector('div').innerText.split('\n')[1],
+            'name': '',//document.querySelector('table#loadDetailHead').querySelectorAll('tr')[1].querySelectorAll('td')[1].querySelector('#elmtKopfLadName').value,
+            'weight': document.querySelector('table#transportListTable').querySelectorAll('tr')[1].querySelectorAll('td')[9].querySelector('div').innerText.split('\n')[0],
+            'start': document.querySelector('table#transportListTable').querySelectorAll('tr')[1].querySelectorAll('td')[7].querySelector('div').innerText.split('\n')[0],
+            'end': document.querySelector('table#transportListTable').querySelectorAll('tr')[1].querySelectorAll('td')[7].querySelector('div').innerText.split('\n')[1],
+        }
     } else {
         var data = {
             'id': document.querySelector('table.common-grid-table').querySelector('tr').querySelectorAll('td')[1].innerText,

@@ -1,135 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popup</title>
     <!-- Bootstrap CSS CDN -->
-    <link href="css/popup.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/select2.min.css" />
-    <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
+    <!-- <link href="css/popup.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css" /> -->
+    <!-- <link rel="stylesheet" href="css/select2.min.css" /> -->
+    <!-- <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" /> -->
     <!-- Or for RTL support -->
-    <link rel="stylesheet" href="css/select2-bootstrap-5-theme.rtl.min.css" />
+    <!-- <link rel="stylesheet" href="css/select2-bootstrap-5-theme.rtl.min.css" /> -->
+    <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery.slim.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/select2.min.js"></script>
     <script src="js/popup.js"></script>
 </head>
-<body>
-<form id="addbookmark">
-<div class="container-sm mt-8" style="min-width: 450px;">
-    <table class="table">
-        <tbody>
-        <tr>
-            <th scope="row">from</th>
-            <td>
-                <textarea type="text" class="form-control" id="from" rows="2"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">to</th>
-            <td>
-                <textarea type="text" class="form-control" id="to" rows="2"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">ID</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="id">
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">company</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="company">
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">start</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="start">
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">end</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="end">
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">type</th>
-            <td colspan="2">
-                <div class="form-check form-check-inline">
-                    <input required class="form-check-input" type="radio" name="type" id="inlineRadio1" value="FTL">
-                    <label class="form-check-label" for="inlineRadio1">FTL</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="LTL">
-                    <label class="form-check-label" for="inlineRadio2">LTL</label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">req</th>
-            <td colspan="2">
-                <select class="form-select select-field" id="req" data-placeholder="Select from list">
-                    <option></option>
-                    <option value="REF">REF</option>
-                    <option value="TILT">TILT</option>
-                    <option value="JUMBO-120m3">JUMBO-120m3</option>
-                    <option value="MEGA">MEGA</option>
-                    <option value="box trailer">box trailer</option>
-                    <option value="small">small</option>
-                    <option value="container">container</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">ADR</th>
-            <td colspan="2">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="special" id="inlineCheckbox4" value="ADR">
-                    <label class="form-check-label" for="inlineCheckbox4"></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">weight</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="weight">
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">LDM</th>
-            <td colspan="2">
-                <input type="text" class="form-control" id="ltl" required>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">comments</th>
-            <td colspan="2">
-                <textarea type="text" class="form-control" id="comment"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">result</th>
-            <td colspan="2">
-                <textarea type="text" class="form-control" id="result" rows="6"></textarea>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 
-    <div class="d-flex flex-row">
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary ">Generate request</button>
+<body>
+    <form id="addbookmark">
+        <div class="container-sm mt-8" style="min-width: 450px;">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row">from</th>
+                        <td>
+                            <textarea type="text" class="form-control" id="from" rows="2"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">to</th>
+                        <td>
+                            <textarea type="text" class="form-control" id="to" rows="2"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ID</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="id">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">company</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="company">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">start</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="start">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">end</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="end">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">type</th>
+                        <td colspan="2" class="specialtd">
+                            <div class="form-check form-check-inline">
+                                <input required class="form-check-input" type="radio" name="type" id="inlineRadio1"
+                                    value="FTL">
+                                <label class="form-check-label" for="inlineRadio1">FTL</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="LTL">
+                                <label class="form-check-label" for="inlineRadio2">LTL</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">req</th>
+                        <td colspan="2">
+                            <select class="form-select select-field" id="req" data-placeholder="Select from list">
+                                <option></option>
+                                <option value="REF">REF</option>
+                                <option value="TILT">TILT</option>
+                                <option value="JUMBO-120m3">JUMBO-120m3</option>
+                                <option value="MEGA">MEGA</option>
+                                <option value="box trailer">box trailer</option>
+                                <option value="small">small</option>
+                                <option value="container">container</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ADR</th>
+                        <td colspan="2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="special" id="inlineCheckbox4"
+                                    value="ADR">
+                                <label class="form-check-label" for="inlineCheckbox4"></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">weight</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="weight">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">LDM</th>
+                        <td colspan="2">
+                            <input type="text" class="form-control" id="ltl" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">comments</th>
+                        <td colspan="2">
+                            <textarea type="text" class="form-control" id="comment"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">result</th>
+                        <td colspan="2">
+                            <textarea type="text" class="form-control" id="result" rows="4"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex flex-row">
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary ">Generate request</button>
+                </div>
+                <div class="mb-3 ms-3">
+                    <button id="sendToTrello" class="btn btn-info">Create card in trello</button>
+                </div>
+            </div>
         </div>
-        <div class="mb-3 ms-3">
-            <button id="sendToTrello" class="btn btn-info">Create card in trello</button>
-        </div>
-    </div>
-</div>
-</form>
+    </form>
 </body>
+
 </html>

@@ -1,0 +1,148 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    overflow-x: hidden;
+}
+
+#addbookmark {
+    max-width: 450px;
+}
+
+.container-sm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    align-items: center;
+    padding-inline: 10px;
+}
+
+[scope="row"] {
+    text-align: left;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+table tbody tr th {
+    padding-right: 15px;
+}
+
+table tbody tr td {
+    width: 300px;
+}
+
+table tbody tr td textarea {
+    width: 100%;
+    resize: none;
+}
+
+table tbody tr td input {
+    width: 100%;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+input,
+textarea {
+    margin: 0;
+    padding-inline: 5px;
+    margin-top: 7px;
+    margin-bottom: 3px;
+    display: inline-block;
+    outline: none;
+    border: none;
+    border: 1px solid #9aa6b4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    background: transparent;
+    outline: none;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    border: 1px solid #9aa6b4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    margin-top: 7px;
+    margin-bottom: 3px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border: 1px solid #003A7D;
+}
+
+
+
+input[type="radio"],
+input[type="checkbox"],
+.form-check-label {
+    box-shadow: none;
+    display: inline-block;
+    width: 20px;
+    margin: 0;
+
+}
+
+
+.form-check {
+    display: flex;
+    align-items: center;
+    column-gap: 1px;
+}
+
+.specialtd {
+    display: flex;
+    column-gap: 20px;
+    padding: 0;
+}
+
+
+
+.d-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 20px;
+    margin-top: 5px;
+    align-self: flex-end;
+    padding-right: 50px;
+}
+
+.btn {
+    font: inherit;
+    border: none;
+    border-radius: 14px;
+    padding-inline: 10px;
+    padding-block: 9px;
+    color: aliceblue;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.btn:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #F97D0A;
+}
+
+.btn-info {
+    background-color: #003A7D;
+}
