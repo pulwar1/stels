@@ -48,16 +48,34 @@ export async function myOwnCard(text)
     }
 
     var token = await getAuthToken();
-    var cardPromise = fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+    var cardPromise = fetch('http://165.22.92.183:8080/api/extension/request', {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(newCard)
-    }).then(res => ({ id: 'mock', url: 'https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3' }));
+    }).then(async res => {
+        if (!res.ok) {
+            let errorText = await res.text().catch(() => '');
+            if (res.status === 422) {
+                try {
+                    let errObj = JSON.parse(errorText);
+                    if (errObj.errors) {
+                        let msg = "Ошибка валидации:\n" + Object.entries(errObj.errors)
+                            .map(([f, e]) => `${f}: ${e.join(', ')}`)
+                            .join('\n');
+                        chrome.runtime.sendMessage({ action: 'validationError', errors: errObj.errors }).catch(() => {});
+                        throw new Error(msg);
+                    }
+                } catch(e) {}
+            }
+            throw new Error(`HTTP ${res.status} error: ${errorText}`);
+        }
+        return { id: 'mock', url: 'http://165.22.92.183:8080/api/extension/request' };
+    });
 
-
+    var notification = null;
     if (options.showNotification) {
         var newNotification = {
             title: "Data sent to webhook!",
@@ -65,10 +83,25 @@ export async function myOwnCard(text)
             iconUrl: "icon.png",
             type: "basic"
         };
-
-        createNotification(null, newNotification, cardPromise)
-
+        notification = createNotification(null, newNotification, cardPromise);
     }
+
+    cardPromise.then(() => {
+        chrome.runtime.sendMessage({ action: 'submitSuccess' }).catch(() => {});
+    }).catch(function(error) {
+        chrome.runtime.sendMessage({ action: 'submitError' }).catch(() => {});
+        let updatedContent = {
+            title: "Failed to send data!",
+            message: error.message
+        };
+        if (notification) {
+            notification.then(notId => {
+                chrome.notifications.update(notId, updatedContent);
+            });
+        } else {
+            createNotification(null, updatedContent, cardPromise);
+        }
+    });
 
 }
 
@@ -108,14 +141,31 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
     }
 
     var token = await getAuthToken();
-    var cardPromise = fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+    var cardPromise = fetch('http://165.22.92.183:8080/api/extension/request', {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(newCard)
-    }).then(res => ({ id: 'mock', url: 'https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', idAttachmentCover: null }));
+    }).then(async res => {
+        if (!res.ok) {
+            let errorText = await res.text().catch(() => '');
+            if (res.status === 422) {
+                try {
+                    let errObj = JSON.parse(errorText);
+                    if (errObj.errors) {
+                        let msg = "Ошибка валидации:\n" + Object.entries(errObj.errors)
+                            .map(([f, e]) => `${f}: ${e.join(', ')}`)
+                            .join('\n');
+                        throw new Error(msg);
+                    }
+                } catch(e) {}
+            }
+            throw new Error(`HTTP ${res.status} error: ${errorText}`);
+        }
+        return { id: 'mock', url: 'http://165.22.92.183:8080/api/extension/request', idAttachmentCover: null };
+    });
 
     var notification = null;
 
@@ -138,7 +188,7 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
         // success
         if (contextInfo && contextInfo.mediaType === 'image') {
             if (contextInfo.srcUrl.startsWith("http://") || contextInfo.srcUrl.startsWith("https://")) {
-                fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+                fetch('http://165.22.92.183:8080/api/extension/request', {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',

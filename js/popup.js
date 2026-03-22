@@ -42,6 +42,7 @@ window.addEventListener('load', function(evt) {
         var req = document.getElementById('req').value;
         var comment = document.getElementById('comment').value;
         var company = document.getElementById('company').value;
+        var temperature = document.getElementById('temperature').value;
 
         var jsonPayload = {
             "from": from,
@@ -52,7 +53,7 @@ window.addEventListener('load', function(evt) {
             "endDate": end,
             "shipmentType": type,
             "transportType": req,
-            "temperature": "",
+            "temperature": temperature,
             "dangerous": special === "ADR",
             "weight": weight,
             "loadingMeter": ltl,
@@ -63,8 +64,8 @@ window.addEventListener('load', function(evt) {
         navigator.serviceWorker.controller.postMessage({ type: 'myFunction', input: jsonPayload});
         var btn = document.getElementById('sendToTrello');
         btn.disabled = true;
-        btn.innerText = 'Successfully sent!';
-        btn.classList.remove('btn-info');
+        btn.innerText = 'Sending...';
+        btn.classList.remove('btn-info', 'btn-danger');
         btn.classList.add('btn-success');
     });
 });
@@ -86,4 +87,86 @@ $(document).ready(function() {
         }
     });
 
+    $(document).on('change', '#req', function() {
+        var selectedValue = $(this).val();
+        var tempInput = $('#temperature');
+
+        if (selectedValue === 'REF') {
+            tempInput.prop('disabled', false)
+                .prop('required', true);
+        } else {
+            tempInput.prop('disabled', true)
+                .prop('required', false)
+                .val('');
+        }
+    });
+
+    // Initialize initial state on load
+    $('#req').trigger('change');
+
+});
+
+chrome.runtime.onMessage.addListener(function(msg) {
+    if (msg.action === 'validationError') {
+        var btn = document.getElementById('sendToTrello');
+        btn.disabled = false;
+        btn.innerText = 'Send to webhook';
+        btn.classList.remove('btn-success', 'btn-info', 'btn-danger');
+        btn.classList.add('btn-info');
+        
+        var fieldMap = {
+            "fromLocations": ["from"],
+            "toLocations": ["to"],
+            "customerReference": ["id"],
+            "customerName": ["company"],
+            "startDate": ["start"],
+            "endDate": ["end"],
+            "shipmentType": ["inlineRadio1", "inlineRadio2"],
+            "transportType": ["req"],
+            "temperature": ["temperature"],
+            "dangerous": ["inlineCheckbox4"],
+            "weight": ["weight"],
+            "loadingMeter": ["ltl"],
+            "comments": ["comment"]
+        };
+        
+        document.querySelectorAll('.is-invalid').forEach(el => {
+            el.classList.remove('is-invalid');
+            el.style.border = '';
+            el.title = '';
+            el.style.boxShadow = '';
+        });
+
+        for (let key in msg.errors) {
+            let ids = fieldMap[key] || [key];
+            let errorMsg = msg.errors[key].join(', ');
+            ids.forEach(id => {
+                let el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('is-invalid');
+                    el.style.border = '2px solid red';
+                    el.style.boxShadow = '0 0 5px red';
+                    el.title = errorMsg;
+                }
+            });
+        }
+    } else if (msg.action === 'submitSuccess') {
+        var btn = document.getElementById('sendToTrello');
+        btn.innerText = 'Successfully sent!';
+        btn.classList.remove('btn-info', 'btn-danger');
+        btn.classList.add('btn-success');
+        
+        document.querySelectorAll('.is-invalid').forEach(el => {
+            el.classList.remove('is-invalid');
+            el.style.border = '';
+            el.title = '';
+            el.style.boxShadow = '';
+        });
+    } else if (msg.action === 'submitError') {
+        var btn = document.getElementById('sendToTrello');
+        btn.disabled = false;
+        btn.innerText = 'Error! Try again';
+        btn.classList.remove('btn-success', 'btn-info');
+        btn.classList.add('btn-danger');
+    }
 });

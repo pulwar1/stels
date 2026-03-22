@@ -150,4 +150,9 @@ input[type="checkbox"],
 .btn-success {
     background-color: #28a745;
     color: white !important;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white !important;
 }
