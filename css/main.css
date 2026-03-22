@@ -146,3 +146,8 @@ input[type="checkbox"],
 .btn-info {
     background-color: #003A7D;
 }
+
+.btn-success {
+    background-color: #28a745;
+    color: white !important;
+}

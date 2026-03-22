@@ -1,48 +1,4 @@
-// POST the data to the server using XMLHttpRequest
-function addBookmark() {
-    console.log('addBookmark');
-    // Cancel the form submit
-    event.preventDefault();
 
-
-    var from = replaceOnlyNewlines(document.getElementById('from').value);
-    var to = replaceOnlyNewlines(document.getElementById('to').value);
-    var id = document.getElementById('id').value;
-    var weight = document.getElementById('weight').value;
-    var start = document.getElementById('start').value;
-    var end = document.getElementById('end').value;
-    var type = document.querySelector('input[name="type"]:checked').value;
-    var specialElement = document.querySelector('input[name="special"]:checked');
-    var special = specialElement ? specialElement.value : '';
-    var ltl = document.getElementById('ltl').value;
-    var req = document.getElementById('req').value;
-    var comment = document.getElementById('comment').value;
-    var company = document.getElementById('company').value;
-    var fromCode = from.substring(0, 2);
-    var toCode = to.substring(0, 2);
-
-
-    if(special == 0) {
-        special = '';
-    }
-
-    var params = fromCode + '-' + toCode + '/ID ' + id + ' ' + company + '/' + from + ' --> ' + to + '/' + start + ' --> ' + end + '/' + type + '/' + req + '/' + special + '/' + weight + '/' + ltl;
-
-    if (ltl) {
-        params += ' ldm'
-    }
-    params +=  '/' + comment;
-
-    document.getElementById('result').value = params;
-
-    navigator.clipboard.writeText(params)
-        .then(() => {
-            console.log('Text copied to clipboard');
-        })
-        .catch(err => {
-            console.error('Failed to copy text: ', err);
-        });
-}
 
 function replaceOnlyNewlines(text) {
     return text.replace(/\r?\n/g, ' + ');
@@ -69,14 +25,47 @@ window.addEventListener('load', function(evt) {
     //     width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
     //     openOnEnter: false
     // } );
-    document.getElementById('addbookmark').addEventListener('submit', addBookmark);
-
-    document.getElementById('sendToTrello').addEventListener('click', function(event) {
+    document.getElementById('addbookmark').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
-        var inputValue = document.getElementById('result').value
-        console.log(inputValue);
-        navigator.serviceWorker.controller.postMessage({ type: 'myFunction', input: inputValue});
-        document.getElementById('sendToTrello').disabled = true;
+        
+        var from = replaceOnlyNewlines(document.getElementById('from').value);
+        var to = replaceOnlyNewlines(document.getElementById('to').value);
+        var id = document.getElementById('id').value;
+        var weight = document.getElementById('weight').value;
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var typeElement = document.querySelector('input[name="type"]:checked');
+        var type = typeElement ? typeElement.value : '';
+        var specialElement = document.querySelector('input[name="special"]:checked');
+        var special = specialElement ? specialElement.value : '';
+        var ltl = document.getElementById('ltl').value;
+        var req = document.getElementById('req').value;
+        var comment = document.getElementById('comment').value;
+        var company = document.getElementById('company').value;
+
+        var jsonPayload = {
+            "from": from,
+            "to": to,
+            "customerReference": id,
+            "customerName": company,
+            "startDate": start,
+            "endDate": end,
+            "shipmentType": type,
+            "transportType": req,
+            "temperature": "",
+            "dangerous": special === "ADR",
+            "weight": weight,
+            "loadingMeter": ltl,
+            "comments": comment
+        };
+        
+        console.log(jsonPayload);
+        navigator.serviceWorker.controller.postMessage({ type: 'myFunction', input: jsonPayload});
+        var btn = document.getElementById('sendToTrello');
+        btn.disabled = true;
+        btn.innerText = 'Successfully sent!';
+        btn.classList.remove('btn-info');
+        btn.classList.add('btn-success');
     });
 });
 
